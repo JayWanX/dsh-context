@@ -1,0 +1,147 @@
+/* The Plugins page owns the page/section chrome; the card draws its own groups, which are settings-card panels.
+   Row family, control width (132px), focus ring and fill-vs-stroked control split follow dsh-streamfold's
+   plugin card so both plugins' settings read as one family. */
+
+.lc-settings-prefs {
+  /* The one control-column width: every dropdown, switch and field in the card shares it, so the whole
+     page's controls align; change the width here and nowhere else. */
+  --lc-settings-control-width: 132px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+/* ── 分区（settings-card 面板）───────────────────────────────────────────── */
+
+/* The `settings-card-*` tokens are the official settings-panel chrome (the same pair dsh-streamfold's card
+   uses); they fall back to the generic border/bg layer pair so a host that predates them still draws a panel. */
+.lc-settings-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 0.5px solid var(--dsw-alias-settings-card-stroke, var(--dsw-alias-border-l2));
+  border-radius: var(--dsw-radius-xl);
+  background: var(--dsw-alias-settings-card-fill, transparent);
+  padding: 0 16px 4px;
+}
+
+.lc-settings-group-title {
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  margin: 0;
+  padding: 12px 0 0;
+}
+
+/* The in-group hint rides the group title's spacing; the read-only notice keeps its own top margin. */
+.lc-settings-group-note { color: var(--dsw-alias-label-tertiary); font-size: 12px; line-height: 1.5; margin: 4px 0 0; }
+.lc-settings-note { color: var(--dsw-alias-label-tertiary); font-size: 12px; line-height: 1.5; margin: 12px 0 4px; }
+
+/* ── 行 ─────────────────────────────────────────────────────────────────── */
+
+/* One row is one field: a text column that folds title over description, and a fixed-width control column. */
+.lc-settings-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; }
+.lc-settings-row + .lc-settings-row { border-top: 0.5px solid var(--dsw-alias-border-l2); }
+.lc-settings-row-main { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+/* Weight pinned so the row title's 400 keeps its one-step lead under any inherited context. */
+.lc-settings-row-title { color: var(--dsw-alias-label-primary); font-size: 14px; font-weight: 400; line-height: 22px; }
+.lc-settings-row-desc { color: var(--dsw-alias-label-tertiary); font-size: 12px; font-weight: 400; line-height: 18px; }
+.lc-settings-row-control { display: flex; align-items: center; justify-content: flex-end; flex: none; width: var(--lc-settings-control-width); }
+
+/* 恢复默认：安静的文字按钮，只在该行被改动过时出现（组件层决定是否渲染），所以视觉权重远低于控件。 */
+.lc-settings-reset {
+  align-self: flex-start;
+  margin-top: 2px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-state-business-primary);
+  cursor: pointer;
+  transition: color 0.16s var(--ds-ease-in-out, ease-in-out);
+}
+.lc-settings-reset:hover:enabled { color: var(--dsw-alias-label-primary); }
+.lc-settings-reset:disabled { opacity: 0.5; cursor: default; }
+.lc-settings-reset:focus-visible { outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary)); outline-offset: 2px; }
+
+/* ── 下拉触发钮：官方 PreferenceRow 的 .selector（填充底、无描边）────────── */
+
+.lc-settings-select {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--dsw-radius-md);
+  background: var(--dsw-alias-bg-module-platform);
+  font: inherit;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  transition: background-color 0.16s var(--ds-ease-in-out, ease-in-out);
+}
+.lc-settings-select:hover:enabled { background: var(--dsw-alias-interactive-bg-hover); }
+/* The focus ring is `--dsw-focus-ring-color`, never `brand-primary`: that token resolves to pure
+   black/white and carries "primary accent" semantics, not focus. */
+.lc-settings-select:focus-visible { outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary)); outline-offset: 2px; }
+.lc-settings-select:disabled { opacity: 0.5; cursor: default; }
+.lc-settings-select-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lc-settings-select-chevron { flex: none; color: var(--dsw-alias-label-tertiary); }
+
+/* ── 文本域：官方 fields.module.css 的 .input（描边，与下拉形成两族控件）── */
+
+.lc-settings-textrow { flex-direction: column; align-items: stretch; gap: 8px; }
+/* A 132px-wide textarea is unreadable, so the text rows give the control column the full width. */
+.lc-settings-textrow-control { width: auto; }
+.lc-settings-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  border: 0.5px solid var(--dsw-alias-border-l4);
+  border-radius: var(--dsw-radius-md);
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.lc-settings-textarea:focus-visible { outline: none; border-color: var(--dsw-alias-state-business-primary); }
+.lc-settings-textarea:disabled { opacity: 0.5; cursor: default; }
+.lc-settings-textarea::placeholder { color: var(--dsw-alias-label-tertiary); }
+
+/* ── 整页动作区：与填充式控件同一族（36px / radius-md / 14px），右对齐 ──── */
+
+.lc-settings-actions { display: flex; justify-content: flex-end; margin-top: 4px; }
+.lc-settings-reset-all {
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--dsw-radius-md);
+  background: var(--dsw-alias-bg-module-platform);
+  font: inherit;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  transition: background-color 0.16s var(--ds-ease-in-out, ease-in-out);
+}
+.lc-settings-reset-all:hover:enabled { background: var(--dsw-alias-interactive-bg-hover); }
+.lc-settings-reset-all:focus-visible { outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary)); outline-offset: 2px; }
+.lc-settings-reset-all:disabled { opacity: 0.4; cursor: default; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-settings-select, .lc-settings-reset, .lc-settings-reset-all { transition: none; }
+}

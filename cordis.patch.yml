@@ -1,0 +1,10 @@
+# Bundle patch layer: the row loads the package's main entry as the host half
+# (a plain Cordis plugin); the `dsh.client` declaration makes the web app load
+# its ./client bundle as the browser half.
+# Row id follows the repo convention: the package name without its `@jaywanx/`
+# scope, so `dsh-context` mounts `@jaywanx/dsh-context`. The id is the entry id
+# every host-side namespace is keyed by (config, settings); only `name` is the
+# npm specifier.
+- insert:
+    - id: dsh-context
+      name: "@jaywanx/dsh-context"
